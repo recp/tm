@@ -19,9 +19,13 @@ tm_thread_new(void* (*func)(void *), void *obj) {
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
   pthread_create(&thread->id, &attr, func, obj);
-  pthread_join(thread->id, NULL);
-
   pthread_attr_destroy(&attr);
 
   return thread;
+}
+
+TM_HIDE
+void
+tm_thread_join(tm_thread *th) {
+  pthread_join(th->id, NULL);
 }

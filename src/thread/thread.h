@@ -18,4 +18,8 @@ TM_HIDE
 tm_thread*
 tm_thread_new(void* (*func)(void *), void *obj);
 
+TM_HIDE
+void
+tm_thread_join(tm_thread *th);
+
 #endif /* thread_h */
