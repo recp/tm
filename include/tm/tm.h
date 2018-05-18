@@ -8,11 +8,6 @@
 
 #include "common.h"
 
-typedef struct tm_timespec {
-  long msec;
-  long nsec;
-} tm_timespec;
-
 typedef struct tm_timer tm_timer;
 typedef double          tm_interval;
 
@@ -20,11 +15,11 @@ typedef void (*tm_func)(tm_timer *timer);
 
 TM_EXPORT
 tm_timer*
-tm_alloc(tm_func callback, tm_interval interval, tm_interval finishat);
+tm_alloc(tm_func cb, tm_interval interval);
 
 TM_EXPORT
-tm_timer*
-tm_settimeout(tm_func callback, tm_interval timeoffset);
+void
+tm_settimeout(tm_func cb, tm_interval offset);
 
 TM_EXPORT
 void

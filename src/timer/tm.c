@@ -4,6 +4,8 @@
  */
 
 #include "../common.h"
+#include "runloop.h"
+
 #include <time.h>
 
 #ifdef __MACH__
@@ -15,18 +17,25 @@ double tm__time2sec = 1.0;
 
 TM_EXPORT
 tm_timer*
-tm_alloc(tm_func callback, tm_interval interval, tm_interval finishat) {
+tm_alloc(tm_func cb, tm_interval interval) {
   tm_allocator *alc;
   tm_timer     *tmr;
 
   alc          = tm_get_allocator();
   tmr          = alc->malloc(sizeof(*tmr));
-  tmr->cb      = callback;
+  tmr->cb      = cb;
   tmr->intr    = interval;
   tmr->elapsed = 0;
 
   return tmr;
 }
+
+TM_EXPORT
+void
+tm_settimeout(tm_func cb, tm_interval offset) {
+  
+}
+
 void
 tm_free(tm_timer *timer) {
   tm_runloop     *loop;
