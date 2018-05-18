@@ -10,6 +10,7 @@
 
 #include <windows.h>
 
+TM_EXPORT
 void
 tm_sleep(double secs) {
   HANDLE        timer;

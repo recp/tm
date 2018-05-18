@@ -4,9 +4,6 @@
  */
 
 #include "thread.h"
-#include "../common.h"
-
-#include <pthread/pthread.h>
 
 TM_HIDE
 tm_thread*

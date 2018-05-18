@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-TM_HIDE
+TM_EXPORT
 void
 tm_sleep(double secs) {
   struct timespec req, rem;
