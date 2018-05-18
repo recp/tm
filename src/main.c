@@ -4,6 +4,7 @@
  */
 
 #include "common.h"
+#include "timer/tm.h"
 
 void TM_CONSTRUCTOR tm__lib_init(void);
 void TM_DESTRUCTOR  tm__lib_cleanup(void);
@@ -11,6 +12,7 @@ void TM_DESTRUCTOR  tm__lib_cleanup(void);
 void
 TM_CONSTRUCTOR
 tm__lib_init() {
+  tm__time_init();
 }
 
 void
