@@ -46,6 +46,12 @@ tm_def_runloop(void) {
   return tm__runloop;
 }
 
+TM_EXPORT
+void
+tm_wait() {
+  tm_thread_join(tm__runloop->thread);
+}
+
 TM_HIDE
 void
 tm__runloop_init(void) {

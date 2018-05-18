@@ -37,4 +37,8 @@ TM_EXPORT
 double
 tm_time(void);
 
+TM_EXPORT
+void
+tm_wait(void);
+
 #endif /* tm_h */
