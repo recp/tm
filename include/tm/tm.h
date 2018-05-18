@@ -20,7 +20,7 @@ typedef void (*tm_func)(tm_timer *timer);
 
 TM_EXPORT
 tm_timer*
-tm_alloc(tm_func callback, tm_interval interval);
+tm_alloc(tm_func callback, tm_interval interval, tm_interval finishat);
 
 TM_EXPORT
 tm_timer*

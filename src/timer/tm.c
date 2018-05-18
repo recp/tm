@@ -11,6 +11,58 @@
 #include <mach/mach.h>
 #endif
 
+double tm__time2sec = 1.0;
+
+TM_EXPORT
+tm_timer*
+tm_alloc(tm_func callback, tm_interval interval, tm_interval finishat) {
+  tm_allocator *alc;
+  tm_timer     *tmr;
+
+  alc          = tm_get_allocator();
+  tmr          = alc->malloc(sizeof(*tmr));
+  tmr->cb      = callback;
+  tmr->intr    = interval;
+  tmr->elapsed = 0;
+
+  return tmr;
+}
+void
+tm_free(tm_timer *timer) {
+  tm_runloop     *loop;
+  tm_allocator   *alc;
+
+  alc  = tm_get_allocator();
+  loop = tm_def_runloop();
+
+  if (loop->timers == timer) {
+    loop->timers = loop->timers->priv2;
+  } else {
+    tm_timer *prev;
+    prev = timer->priv1;
+    prev->priv2 = timer->priv2;
+  }
+
+  alc->free(timer);
+
+  loop->timercount--;
+}
+
+void
+tm_start(tm_timer *timer) {
+  tm_runloop *loop;
+
+  if (timer->started)
+    return;
+
+  loop = tm_def_runloop();
+
+  timer->priv1 = loop->timers;;
+  loop->timers = timer;
+
+  loop->timercount++;
+}
+
 TM_EXPORT
 double
 tm_time() {
