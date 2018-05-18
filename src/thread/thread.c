@@ -7,25 +7,73 @@
 
 TM_HIDE
 tm_thread*
-tm_thread_new(void* (*func)(void *), void *obj) {
+thread_new(void* (*func)(void *), void *obj) {
   tm_allocator  *alc;
-  tm_thread     *thread;
+  tm_thread     *th;
   pthread_attr_t attr;
 
-  alc    = tm_get_allocator();
-  thread = alc->calloc(1, sizeof(*thread));
+  alc = tm_get_allocator();
+  th  = alc->calloc(1, sizeof(*th));
 
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-  pthread_create(&thread->id, &attr, func, obj);
+  pthread_create(&th->id, &attr, func, obj);
   pthread_attr_destroy(&attr);
 
-  return thread;
+  return th;
 }
 
 TM_HIDE
 void
-tm_thread_join(tm_thread *th) {
+thread_join(tm_thread *th) {
   pthread_join(th->id, NULL);
+}
+
+TM_HIDE
+void
+thread_cond_init(tm_thread_cond *cond) {
+  pthread_cond_init(&cond->cond, NULL);
+}
+
+TM_HIDE
+void
+thread_cond_signal(tm_thread_cond *cond) {
+  pthread_cond_signal(&cond->cond);
+}
+
+TM_HIDE
+void
+thread_cond_destroy(tm_thread_cond *cond) {
+  pthread_cond_destroy(&cond->cond);
+}
+
+TM_HIDE
+void
+thread_cond_wait(tm_thread_cond *cond, tm_thread_mutex *mutex) {
+  pthread_cond_wait(&cond->cond, &mutex->mutex);
+}
+
+TM_HIDE
+void
+thread_mutex_init(tm_thread_mutex *mutex) {
+  pthread_mutex_init(&mutex->mutex, NULL);
+}
+
+TM_HIDE
+void
+thread_mutex_destroy(tm_thread_mutex *mutex) {
+  pthread_mutex_destroy(&mutex->mutex);
+}
+
+TM_HIDE
+void
+thread_mutex_lock(tm_thread_mutex *mutex) {
+  pthread_mutex_lock(&mutex->mutex);
+}
+
+TM_HIDE
+void
+thread_mutex_unlock(tm_thread_mutex *mutex) {
+  pthread_mutex_unlock(&mutex->mutex);
 }
