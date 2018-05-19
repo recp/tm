@@ -62,17 +62,42 @@ tm_start(tm_timer *timer) {
     return;
 
   loop = tm_def_runloop();
-
   thread_wrlock(&loop->rwlock);
 
   if (loop->timers)
     loop->timers->prev = timer;
-  timer->next  = loop->timers;
-  loop->timers = timer;
+
+  timer->next    = loop->timers;
+  loop->timers   = timer;
+  timer->started = true;
 
   loop->timercount++;
-  thread_rwunlock(&loop->rwlock);
 
+  thread_rwunlock(&loop->rwlock);
+  thread_cond_signal(&loop->cond);
+}
+
+TM_EXPORT
+void
+tm_pause(tm_timer *timer) {
+  tm_runloop *loop;
+
+  if (!timer->started)
+    return;
+
+  loop = tm_def_runloop();
+  thread_wrlock(&loop->rwlock);
+
+  if (timer->prev)
+    timer->prev->next = timer->next;
+
+  if (loop->timers == timer)
+    loop->timers = timer->next;
+
+  timer->started = false;
+  loop->timercount--;
+
+  thread_rwunlock(&loop->rwlock);
   thread_cond_signal(&loop->cond);
 }
 

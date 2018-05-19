@@ -25,10 +25,9 @@ void*
 tm_runloop_run(void* arg) {
   tm_runloop *loop;
   tm_timer   *tmr;
-  double      time, prev, sleeptime, diff, tdiff;
+  double      time, sleeptime, tdiff;
 
-  loop      = arg;
-  prev      = 0.0;
+  loop  = arg;
 
   thread_lock(&loop->mutex);
 
@@ -37,13 +36,16 @@ tm_runloop_run(void* arg) {
       thread_cond_wait(&loop->cond, &loop->mutex);
 
     time = tm_time();
-    diff = time - prev;
 
     sleeptime = DBL_MAX;
 
     thread_rdlock(&loop->rwlock);
-
     tmr = loop->timers;
+    thread_rwunlock(&loop->rwlock);
+
+    /*
+     TODO: improve loopkup, make timers ordered.
+     */
     while (tmr) {
       tdiff = tmr->last + tmr->intr - time;
 
@@ -60,12 +62,8 @@ tm_runloop_run(void* arg) {
       tmr = tmr->next;
     }
 
-    thread_rwunlock(&loop->rwlock);
-
     if (sleeptime > 0.0001)
       tm_sleep(sleeptime);
-
-    prev = time;
   }
 
   thread_unlock(&loop->mutex);
