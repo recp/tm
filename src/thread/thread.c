@@ -68,12 +68,42 @@ thread_mutex_destroy(tm_thread_mutex *mutex) {
 
 TM_HIDE
 void
-thread_mutex_lock(tm_thread_mutex *mutex) {
+thread_lock(tm_thread_mutex *mutex) {
   pthread_mutex_lock(&mutex->mutex);
 }
 
 TM_HIDE
 void
-thread_mutex_unlock(tm_thread_mutex *mutex) {
+thread_unlock(tm_thread_mutex *mutex) {
   pthread_mutex_unlock(&mutex->mutex);
+}
+
+TM_HIDE
+void
+thread_rwlock_init(tm_thread_rwlock *rwlock) {
+  pthread_rwlock_init(&rwlock->rwlock, NULL);
+}
+
+TM_HIDE
+void
+thread_rwlock_destroy(tm_thread_rwlock *rwlock) {
+  pthread_rwlock_destroy(&rwlock->rwlock);
+}
+
+TM_HIDE
+void
+thread_rdlock(tm_thread_rwlock *rwlock) {
+  pthread_rwlock_rdlock(&rwlock->rwlock);
+}
+
+TM_HIDE
+void
+thread_rwunlock(tm_thread_rwlock *rwlock) {
+  pthread_rwlock_unlock(&rwlock->rwlock);
+}
+
+TM_HIDE
+void
+thread_wrlock(tm_thread_rwlock *rwlock) {
+  pthread_rwlock_wrlock(&rwlock->rwlock);
 }
