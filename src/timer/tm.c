@@ -22,10 +22,9 @@ tm_alloc(tm_func cb, tm_interval interval) {
   tm_timer     *tmr;
 
   alc          = tm_get_allocator();
-  tmr          = alc->malloc(sizeof(*tmr));
+  tmr          = alc->calloc(1, sizeof(*tmr));
   tmr->cb      = cb;
   tmr->intr    = interval;
-  tmr->elapsed = 0;
 
   return tmr;
 }
@@ -45,11 +44,9 @@ tm_free(tm_timer *timer) {
   loop = tm_def_runloop();
 
   if (loop->timers == timer) {
-    loop->timers = loop->timers->priv2;
-  } else {
-    tm_timer *prev;
-    prev = timer->priv1;
-    prev->priv2 = timer->priv2;
+    loop->timers = loop->timers->next;
+  } else if (timer->prev) {
+    timer->prev->next = timer->next;
   }
 
   alc->free(timer);
@@ -66,10 +63,14 @@ tm_start(tm_timer *timer) {
 
   loop = tm_def_runloop();
 
-  timer->priv1 = loop->timers;;
+  thread_wrlock(&loop->rwlock);
+  timer->prev  = loop->timers;
   loop->timers = timer;
 
   loop->timercount++;
+  thread_rwunlock(&loop->rwlock);
+
+  thread_cond_signal(&loop->cond);
 }
 
 TM_EXPORT

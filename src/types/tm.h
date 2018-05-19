@@ -9,9 +9,9 @@
 #include "common.h"
 
 typedef struct tm_timer {
+  tm_timer   *prev;
+  tm_timer   *next;
   tm_func     cb;
-  void       *priv1;
-  void       *priv2;
   tm_interval intr;
   tm_interval elapsed;
   bool        repeat;

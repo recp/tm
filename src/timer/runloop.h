@@ -22,6 +22,9 @@ typedef struct tm_runloop {
   tm_thread        *thread;
   tm_timeout_queue *timeouts;
   tm_timer         *timers;
+  tm_thread_cond    cond;
+  tm_thread_mutex   mutex;
+  tm_thread_rwlock  rwlock;
   int               id;
   int               timercount;
   bool              stop;

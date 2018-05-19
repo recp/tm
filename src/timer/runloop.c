@@ -34,8 +34,12 @@ tm_runloop_alloc(void) {
   alc  = tm_get_allocator();
   loop = alc->calloc(1, sizeof(*loop));
 
-  loop->thread = tm_thread_new(tm_runloop_run, loop);
+  loop->thread = thread_new(tm_runloop_run, loop);
   loop->id     = ++tm__runloopid;
+
+  thread_mutex_init(&loop->mutex);
+  thread_cond_init(&loop->cond);
+  thread_rwlock_init(&loop->rwlock);
 
   return loop;
 }
@@ -49,7 +53,7 @@ tm_def_runloop(void) {
 TM_EXPORT
 void
 tm_wait() {
-  tm_thread_join(tm__runloop->thread);
+  thread_join(tm__runloop->thread);
 }
 
 TM_HIDE
