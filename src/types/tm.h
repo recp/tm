@@ -13,6 +13,7 @@ typedef struct tm_timer {
   tm_timer   *next;
   tm_func     cb;
   tm_interval intr;
+  tm_interval last;
   tm_interval elapsed;
   bool        repeat;
   bool        started;

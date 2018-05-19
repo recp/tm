@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <float.h>
 
 #ifdef __APPLE__
 #  include <mach/mach_time.h>
@@ -22,6 +23,53 @@ int         tm__runloopid = 0;
 static
 void*
 tm_runloop_run(void* arg) {
+  tm_runloop *loop;
+  tm_timer   *tmr;
+  double      time, prev, sleeptime, diff, tdiff;
+
+  loop      = arg;
+  prev      = 0.0;
+
+  thread_lock(&loop->mutex);
+
+  while (!loop->stop) {
+    if (loop->timercount < 1)
+      thread_cond_wait(&loop->cond, &loop->mutex);
+
+    time = tm_time();
+    diff = time - prev;
+
+    sleeptime = DBL_MAX;
+
+    thread_rdlock(&loop->rwlock);
+
+    tmr = loop->timers;
+    while (tmr) {
+      tdiff = tmr->last + tmr->intr - time;
+
+      if (tdiff <= 0.0) {
+        tmr->last = time;
+        tmr->cb(tmr);
+      }
+
+      if (tdiff > 0)
+        sleeptime = tm_mind(sleeptime, tdiff);
+      else
+        sleeptime = tm_mind(sleeptime, tmr->intr);
+
+      tmr = tmr->next;
+    }
+
+    thread_rwunlock(&loop->rwlock);
+
+    if (sleeptime > 0.0001)
+      tm_sleep(sleeptime);
+
+    prev = time;
+  }
+
+  thread_unlock(&loop->mutex);
+
   return NULL;
 }
 
@@ -34,12 +82,12 @@ tm_runloop_alloc(void) {
   alc  = tm_get_allocator();
   loop = alc->calloc(1, sizeof(*loop));
 
-  loop->thread = thread_new(tm_runloop_run, loop);
-  loop->id     = ++tm__runloopid;
-
   thread_mutex_init(&loop->mutex);
   thread_cond_init(&loop->cond);
   thread_rwlock_init(&loop->rwlock);
+
+  loop->thread = thread_new(tm_runloop_run, loop);
+  loop->id     = ++tm__runloopid;
 
   return loop;
 }

@@ -64,7 +64,10 @@ tm_start(tm_timer *timer) {
   loop = tm_def_runloop();
 
   thread_wrlock(&loop->rwlock);
-  timer->prev  = loop->timers;
+
+  if (loop->timers)
+    loop->timers->prev = timer;
+  timer->next  = loop->timers;
   loop->timers = timer;
 
   loop->timercount++;

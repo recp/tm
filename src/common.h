@@ -25,4 +25,20 @@
 
 #define TM__UNUSED(X) (void)X
 
+TM_INLINE
+double
+tm_mind(double a, double b) {
+  if (a < b)
+    return a;
+  return b;
+}
+
+TM_INLINE
+double
+tm_maxd(double a, double b) {
+  if (a > b)
+    return a;
+  return b;
+}
+
 #endif /* src_common_h */
