@@ -9,9 +9,12 @@
 #include <stdio.h>
 #include <time.h>
 #include <signal.h>
+#include <float.h>
+
+#if !defined(_WIN32) && !defined(_MSC_VER)
 #include <unistd.h>
 #include <sys/time.h>
-#include <float.h>
+#endif
 
 #ifdef __APPLE__
 #  include <mach/mach_time.h>
@@ -57,7 +60,12 @@ tm_stoptimers(tm_runloop *loop) {
 }
 
 static
+#if defined(_WIN32) || defined(_MSC_VER)
+DWORD
+#else
 void*
+#endif
+
 tm_runloop_run(void* arg) {
   tm_runloop *loop;
   tm_timer   *tmr;
@@ -122,7 +130,12 @@ tm_runloop_run(void* arg) {
 
   thread_unlock(&loop->mutex);
 
-  return NULL;
+#if defined(_WIN32) || defined(_MSC_VER)
+    return 0;
+#else
+    return NULL;
+#endif
+
 }
 
 TM_HIDE

@@ -119,10 +119,10 @@ tm_time() {
   uint64_t abstime;
   abstime = mach_absolute_time();
   return abstime * tm__time2sec;
-#elif defined(__WIN32__)
+#elif defined(_WIN32) || defined(_MSC_VER)
   uint64_t abstime;
   QueryPerformanceCounter((LARGE_INTEGER *)&abstime);
-  return abstime * tm__time2sec
+  return abstime * tm__time2sec;
 #else
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);

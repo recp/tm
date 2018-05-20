@@ -25,6 +25,16 @@
 
 #define TM__UNUSED(X) (void)X
 
+#if defined(_WIN32) || defined(WIN32)
+
+ /* Exclude rarely-used stuff from Windows headers */
+ /* Windows Header Files: */
+#  define WIN32_LEAN_AND_MEAN 
+#  include <SDKDDKVer.h>
+#  include <windows.h>
+
+#endif
+
 TM_INLINE
 double
 tm_mind(double a, double b) {
