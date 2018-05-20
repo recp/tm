@@ -38,10 +38,6 @@ void
 tm_stop(tm_timer *timer);
 
 TM_EXPORT
-void
-tm_destroy(tm_timer *timer);
-
-TM_EXPORT
 double
 tm_time(void);
 
