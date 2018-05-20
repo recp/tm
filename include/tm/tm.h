@@ -5,6 +5,9 @@
 
 #ifndef tm_h
 #define tm_h
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "common.h"
 
@@ -50,4 +53,7 @@ TM_EXPORT
 void
 tm_free(tm_timer *timer);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* tm_h */
