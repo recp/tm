@@ -35,13 +35,13 @@ thread_join(tm_thread *th) {
 TM_HIDE
 void
 thread_cond_init(tm_thread_cond *cond) {
-  InitializeConditionVariable(cond->cond);
+  InitializeConditionVariable(&cond->cond);
 }
 
 TM_HIDE
 void
 thread_cond_signal(tm_thread_cond *cond) {
-  WakeConditionVariable(cond->cond);
+  WakeConditionVariable(&cond->cond);
 }
 
 TM_HIDE
@@ -53,43 +53,43 @@ thread_cond_destroy(tm_thread_cond *cond) {
 TM_HIDE
 void
 thread_cond_wait(tm_thread_cond *cond, tm_thread_mutex *mutex) {
-  SleepConditionVariableCS(cond->cond, mutex->mutex, INFINITE);
+  SleepConditionVariableCS(&cond->cond, &mutex->mutex, INFINITE);
 }
 
 TM_HIDE
 void
 thread_mutex_init(tm_thread_mutex *mutex) {
-  InitializeCriticalSection(mutex->mutex);
+  InitializeCriticalSection(&mutex->mutex);
 }
 
 TM_HIDE
 void
 thread_mutex_destroy(tm_thread_mutex *mutex) {
-  DeleteCriticalSection(mutex->mutex);
+  DeleteCriticalSection(&mutex->mutex);
 }
 
 TM_HIDE
 void
 thread_lock(tm_thread_mutex *mutex) {
-  EnterCriticalSection(mutex->mutex);
+  EnterCriticalSection(&mutex->mutex);
 }
 
 TM_HIDE
 void
 thread_unlock(tm_thread_mutex *mutex) {
-  LeaveCriticalSection(mutex->mutex);
+  LeaveCriticalSection(&mutex->mutex);
 }
 
 TM_HIDE
 void
 thread_rwlock_init(tm_thread_rwlock *rwlock) {
-  InitializeSRWLock(rwlock->rwlock);
+  InitializeSRWLock(&rwlock->rwlock);
 }
 
 TM_HIDE
 void
 thread_rwlock_destroy(tm_thread_rwlock *rwlock) {
-  (void)*rwlock->rwlock;
+  (void)*&rwlock->rwlock;
 }
 
 TM_HIDE
@@ -97,25 +97,25 @@ void
 thread_rwunlock(tm_thread_rwlock *rwlock) {
   void *state;
   
-  state = *(void **)rwlock->rwlock;
+  state = *(void **)&rwlock->rwlock;
 
   if (state == (void *)1) {
     /* Known to be an exclusive lock */
-    ReleaseSRWLockExclusive(rwlock->rwlock);
+    ReleaseSRWLockExclusive(&rwlock->rwlock);
   } else {
     /* A shared unlock will work */
-    ReleaseSRWLockShared(rwlock->rwlock);
+    ReleaseSRWLockShared(&rwlock->rwlock);
   }
 }
 
 TM_HIDE
 void
 thread_rdlock(tm_thread_rwlock *rwlock) {
-  AcquireSRWLockShared(rwlock->rwlock);
+  AcquireSRWLockShared(&rwlock->rwlock);
 }
 
 TM_HIDE
 void
 thread_wrlock(tm_thread_rwlock *rwlock) {
-  AcquireSRWLockExclusive(rwlock->rwlock);
+  AcquireSRWLockExclusive(&rwlock->rwlock);
 }

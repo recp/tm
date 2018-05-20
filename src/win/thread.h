@@ -13,15 +13,15 @@ typedef struct tm_thread {
 } tm_thread;
 
 typedef struct tm_thread_cond {
-	PCONDITION_VARIABLE cond;
+  CONDITION_VARIABLE cond;
 } tm_thread_cond;
 
 typedef struct tm_thread_mutex {
-	LPCRITICAL_SECTION mutex;
+	CRITICAL_SECTION mutex;
 } tm_thread_mutex;
 
 typedef struct tm_thread_rwlock {
-	PSRWLOCK rwlock;
+	SRWLOCK rwlock;
 } tm_thread_rwlock;
 
 TM_HIDE
