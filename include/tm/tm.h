@@ -27,7 +27,7 @@ tm_start(tm_timer *timer);
 
 TM_EXPORT
 void
-tm_pause(tm_timer *timer);
+tm_stop(tm_timer *timer);
 
 TM_EXPORT
 void
@@ -40,5 +40,9 @@ tm_time(void);
 TM_EXPORT
 void
 tm_wait(void);
+
+TM_EXPORT
+void
+tm_free(tm_timer *timer);
 
 #endif /* tm_h */

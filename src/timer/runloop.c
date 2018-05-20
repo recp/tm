@@ -21,6 +21,31 @@ tm_runloop *tm__runloop   = NULL;
 int         tm__runloopid = 0;
 
 static
+void
+tm_stoptimers(tm_runloop *loop) {
+  tm_timer *tmr;
+
+  thread_wrlock(&loop->rwlock);
+
+  tmr = loop->timers;
+  while (tmr) {
+    if (!tmr->started) {
+      if (tmr->prev)
+        tmr->prev->next = tmr->next;
+
+      if (loop->timers == tmr)
+        loop->timers = tmr->next;
+
+      tmr->started = false;
+      loop->timercount--;
+    }
+    tmr = tmr->next;
+  }
+
+  thread_rwunlock(&loop->rwlock);
+}
+
+static
 void*
 tm_runloop_run(void* arg) {
   tm_runloop *loop;
@@ -41,7 +66,6 @@ tm_runloop_run(void* arg) {
 
     thread_rdlock(&loop->rwlock);
     tmr = loop->timers;
-    thread_rwunlock(&loop->rwlock);
 
     /*
      TODO: improve loopkup, make timers ordered.
@@ -62,6 +86,10 @@ tm_runloop_run(void* arg) {
       tmr = tmr->next;
     }
 
+    thread_rwunlock(&loop->rwlock);
+
+    tm_stoptimers(loop);
+
     if (sleeptime > 0.0001)
       tm_sleep(sleeptime);
   }
@@ -80,8 +108,8 @@ tm_runloop_alloc(void) {
   alc  = tm_get_allocator();
   loop = alc->calloc(1, sizeof(*loop));
 
-  thread_mutex_init(&loop->mutex);
   thread_cond_init(&loop->cond);
+  thread_mutex_init(&loop->mutex);
   thread_rwlock_init(&loop->rwlock);
 
   loop->thread = thread_new(tm_runloop_run, loop);

@@ -4,7 +4,7 @@
  */
 
 #include "common.h"
-#include "timer/tm.h"
+#include "timer/timer.h"
 #include "timer/runloop.h"
 
 void TM_CONSTRUCTOR tm__lib_init(void);

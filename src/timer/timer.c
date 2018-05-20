@@ -35,23 +35,31 @@ tm_settimeout(tm_func cb, tm_interval offset) {
   
 }
 
+TM_EXPORT
 void
 tm_free(tm_timer *timer) {
   tm_runloop     *loop;
   tm_allocator   *alc;
+  tm_timer       *next;
 
   alc  = tm_get_allocator();
   loop = tm_def_runloop();
 
+  tm_stop(timer);
+
+  thread_wrlock(&loop->rwlock);
+
+  next = timer->next;
   if (loop->timers == timer) {
-    loop->timers = loop->timers->next;
+    loop->timers = next;
   } else if (timer->prev) {
-    timer->prev->next = timer->next;
+    timer->prev->next = next;
   }
 
+  loop->timercount--;
   alc->free(timer);
 
-  loop->timercount--;
+  thread_rwunlock(&loop->rwlock);
 }
 
 void
@@ -79,26 +87,8 @@ tm_start(tm_timer *timer) {
 
 TM_EXPORT
 void
-tm_pause(tm_timer *timer) {
-  tm_runloop *loop;
-
-  if (!timer->started)
-    return;
-
-  loop = tm_def_runloop();
-  thread_wrlock(&loop->rwlock);
-
-  if (timer->prev)
-    timer->prev->next = timer->next;
-
-  if (loop->timers == timer)
-    loop->timers = timer->next;
-
+tm_stop(tm_timer *timer) {
   timer->started = false;
-  loop->timercount--;
-
-  thread_rwunlock(&loop->rwlock);
-  thread_cond_signal(&loop->cond);
 }
 
 TM_EXPORT
