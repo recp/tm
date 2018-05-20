@@ -23,23 +23,33 @@ int         tm__runloopid = 0;
 static
 void
 tm_stoptimers(tm_runloop *loop) {
-  tm_timer *tmr;
+  tm_allocator *alc;
+  tm_timer     *tmr, *next;
 
   thread_wrlock(&loop->rwlock);
 
+  alc = tm_get_allocator();
   tmr = loop->timers;
   while (tmr) {
-    if (!tmr->started) {
+     next = tmr->next;
+
+    if (tmr->status & TM_TIMER_WAITING_TO_STOP) {
       if (tmr->prev)
-        tmr->prev->next = tmr->next;
+        tmr->prev->next = next;
+
+      if (next)
+        next->prev = tmr->prev;
 
       if (loop->timers == tmr)
-        loop->timers = tmr->next;
+        loop->timers = next;
 
-      tmr->started = false;
+      tmr->status = TM_TIMER_STOPPED;
       loop->timercount--;
+
+      if (tmr->status & TM_TIMER_WAITING_TO_FREE || tmr->istimeout)
+        alc->free(tmr);
     }
-    tmr = tmr->next;
+    tmr = next;
   }
 
   thread_rwunlock(&loop->rwlock);
@@ -71,17 +81,25 @@ tm_runloop_run(void* arg) {
      TODO: improve loopkup, make timers ordered.
      */
     while (tmr) {
-      tdiff = tmr->last + tmr->intr - time;
+      if (tmr->start_at == 0 || time >= tmr->start_at) {
+        tdiff = tmr->last + tmr->interval - time;
 
-      if (tdiff <= 0.0) {
-        tmr->last = time;
-        tmr->cb(tmr);
+        if (tdiff <= 0.0) {
+          tmr->last = time;
+          tmr->cb(tmr);
+
+          if (tmr->maxtick != 0) {
+            tmr->tick++;
+            if (tmr->maxtick <= tmr->tick)
+              tm_stop(tmr);
+          }
+        }
+
+        if (tdiff > 0)
+          sleeptime = tm_mind(sleeptime, tdiff);
+        else
+          sleeptime = tm_mind(sleeptime, tmr->interval);
       }
-
-      if (tdiff > 0)
-        sleeptime = tm_mind(sleeptime, tdiff);
-      else
-        sleeptime = tm_mind(sleeptime, tmr->intr);
 
       tmr = tmr->next;
     }

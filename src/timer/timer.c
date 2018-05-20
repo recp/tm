@@ -21,10 +21,10 @@ tm_alloc(tm_func cb, tm_interval interval) {
   tm_allocator *alc;
   tm_timer     *tmr;
 
-  alc          = tm_get_allocator();
-  tmr          = alc->calloc(1, sizeof(*tmr));
-  tmr->cb      = cb;
-  tmr->intr    = interval;
+  alc           = tm_get_allocator();
+  tmr           = alc->calloc(1, sizeof(*tmr));
+  tmr->cb       = cb;
+  tmr->interval = interval;
 
   return tmr;
 }
@@ -32,41 +32,27 @@ tm_alloc(tm_func cb, tm_interval interval) {
 TM_EXPORT
 void
 tm_settimeout(tm_func cb, tm_interval offset) {
-  
+  tm_timer *timer;
+
+  timer            = tm_alloc(cb, 0);
+  timer->maxtick   = 1;
+  timer->start_at  = tm_time() + offset;
+  timer->istimeout = true;
+
+  tm_start(timer);
 }
 
 TM_EXPORT
 void
 tm_free(tm_timer *timer) {
-  tm_runloop     *loop;
-  tm_allocator   *alc;
-  tm_timer       *next;
-
-  alc  = tm_get_allocator();
-  loop = tm_def_runloop();
-
-  tm_stop(timer);
-
-  thread_wrlock(&loop->rwlock);
-
-  next = timer->next;
-  if (loop->timers == timer) {
-    loop->timers = next;
-  } else if (timer->prev) {
-    timer->prev->next = next;
-  }
-
-  loop->timercount--;
-  alc->free(timer);
-
-  thread_rwunlock(&loop->rwlock);
+  timer->status = TM_TIMER_WAITING_TO_STOP | TM_TIMER_WAITING_TO_FREE;
 }
 
 void
 tm_start(tm_timer *timer) {
   tm_runloop *loop;
 
-  if (timer->started)
+  if (timer->status != TM_TIMER_STOPPED)
     return;
 
   loop = tm_def_runloop();
@@ -77,7 +63,7 @@ tm_start(tm_timer *timer) {
 
   timer->next    = loop->timers;
   loop->timers   = timer;
-  timer->started = true;
+  timer->status  = TM_TIMER_SCHEDULED;
 
   loop->timercount++;
 
@@ -88,7 +74,7 @@ tm_start(tm_timer *timer) {
 TM_EXPORT
 void
 tm_stop(tm_timer *timer) {
-  timer->started = false;
+  timer->status = TM_TIMER_WAITING_TO_STOP;
 }
 
 TM_EXPORT
