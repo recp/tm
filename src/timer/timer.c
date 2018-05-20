@@ -137,7 +137,7 @@ tm__time_init() {
   mach_timebase_info_data_t info;
   mach_timebase_info(&info);
   tm__time2sec = (double)info.numer / (info.denom * NSEC_PER_SEC);
-#elif defined(__WIN32__)
+#elif defined(_WIN32) || defined(_MSC_VER)
   uint64_t frequency;
   QueryPerformanceFrequency((LARGE_INTEGER *)&frequency);
   tm__time2sec = 1.0 / (double)frequency;
