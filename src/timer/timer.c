@@ -30,6 +30,19 @@ tm_alloc(tm_func cb, tm_interval interval) {
 }
 
 TM_EXPORT
+tm_timer*
+tm_schedule(tm_func cb, tm_interval interval, tm_interval delay) {
+  tm_timer *timer;
+
+  timer           = tm_alloc(cb, interval);
+  timer->start_at = tm_time() + delay;
+
+  tm_start(timer);
+
+  return timer;
+}
+
+TM_EXPORT
 void
 tm_settimeout(tm_func cb, tm_interval delay) {
   tm_timer *timer;
@@ -48,6 +61,7 @@ tm_free(tm_timer *timer) {
   timer->status = TM_TIMER_WAITING_TO_STOP | TM_TIMER_WAITING_TO_FREE;
 }
 
+TM_EXPORT
 void
 tm_start(tm_timer *timer) {
   tm_runloop *loop;
@@ -69,6 +83,13 @@ tm_start(tm_timer *timer) {
 
   thread_rwunlock(&loop->rwlock);
   thread_cond_signal(&loop->cond);
+}
+
+TM_EXPORT
+void
+tm_start_at(tm_timer *timer, tm_interval delay) {
+  timer->start_at = tm_time() + delay;
+  tm_start(timer);
 }
 
 TM_EXPORT

@@ -18,12 +18,20 @@ tm_timer*
 tm_alloc(tm_func cb, tm_interval interval);
 
 TM_EXPORT
+tm_timer*
+tm_schedule(tm_func cb, tm_interval interval, tm_interval delay);
+
+TM_EXPORT
 void
 tm_settimeout(tm_func cb, tm_interval delay);
 
 TM_EXPORT
 void
 tm_start(tm_timer *timer);
+
+TM_EXPORT
+void
+tm_start_at(tm_timer *timer, tm_interval delay);
 
 TM_EXPORT
 void
