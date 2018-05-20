@@ -10,6 +10,10 @@
 #include "../thread/thread.h"
 
 TM_HIDE
+tm_timer*
+tm_alloc2(tm_vfunc cb, void *arg, tm_interval interval);
+
+TM_HIDE
 void
 tm__time_init(void);
 

@@ -91,7 +91,10 @@ tm_runloop_run(void* arg) {
 
         if (tdiff <= 0.0) {
           tmr->last = time;
-          tmr->cb(tmr);
+          if (!tmr->istimeout)
+            tmr->cb(tmr);
+          else
+            tmr->cb2(tmr->arg);
 
           if (tmr->maxtick != 0) {
             tmr->tick++;

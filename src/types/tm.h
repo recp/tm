@@ -19,7 +19,9 @@ typedef enum tm_timer_status {
 typedef struct tm_timer {
   tm_timer       *prev;
   tm_timer       *next;
+  void           *arg;
   tm_func         cb;
+  tm_vfunc        cb2;
   tm_interval     interval;
   tm_interval     last;
   tm_interval     elapsed;

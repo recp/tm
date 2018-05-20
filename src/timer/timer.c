@@ -29,6 +29,21 @@ tm_alloc(tm_func cb, tm_interval interval) {
   return tmr;
 }
 
+TM_HIDE
+tm_timer*
+tm_alloc2(tm_vfunc cb, void *arg, tm_interval interval) {
+  tm_allocator *alc;
+  tm_timer     *tmr;
+
+  alc           = tm_get_allocator();
+  tmr           = alc->calloc(1, sizeof(*tmr));
+  tmr->cb2      = cb;
+  tmr->arg      = arg;
+  tmr->interval = interval;
+
+  return tmr;
+}
+
 TM_EXPORT
 tm_timer*
 tm_schedule(tm_func cb, tm_interval interval, tm_interval delay) {
@@ -44,15 +59,14 @@ tm_schedule(tm_func cb, tm_interval interval, tm_interval delay) {
 
 TM_EXPORT
 void
-tm_settimeout(tm_func cb, tm_interval delay) {
+tm_settimeout(tm_vfunc cb, void *arg, tm_interval delay) {
   tm_timer *timer;
 
-  timer            = tm_alloc(cb, 0);
+  timer            = tm_alloc2(cb, arg, 0);
   timer->maxtick   = 1;
-  timer->start_at  = tm_time() + delay;
   timer->istimeout = true;
 
-  tm_start(timer);
+  tm_start_at(timer, delay);
 }
 
 TM_EXPORT

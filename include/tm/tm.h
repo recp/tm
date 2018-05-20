@@ -11,7 +11,8 @@
 typedef struct tm_timer tm_timer;    /* opaque type */
 typedef double          tm_interval; /* seconds     */
 
-typedef void (*tm_func)(tm_timer *timer);
+typedef void  (*tm_func)(tm_timer *timer);
+typedef void (*tm_vfunc)(void *arg);
 
 TM_EXPORT
 tm_timer*
@@ -23,7 +24,7 @@ tm_schedule(tm_func cb, tm_interval interval, tm_interval delay);
 
 TM_EXPORT
 void
-tm_settimeout(tm_func cb, tm_interval delay);
+tm_settimeout(tm_vfunc cb, void *arg, tm_interval delay);
 
 TM_EXPORT
 void
