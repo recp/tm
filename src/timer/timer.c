@@ -31,12 +31,12 @@ tm_alloc(tm_func cb, tm_interval interval) {
 
 TM_EXPORT
 void
-tm_settimeout(tm_func cb, tm_interval offset) {
+tm_settimeout(tm_func cb, tm_interval delay) {
   tm_timer *timer;
 
   timer            = tm_alloc(cb, 0);
   timer->maxtick   = 1;
-  timer->start_at  = tm_time() + offset;
+  timer->start_at  = tm_time() + delay;
   timer->istimeout = true;
 
   tm_start(timer);

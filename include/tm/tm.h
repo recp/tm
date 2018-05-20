@@ -8,8 +8,8 @@
 
 #include "common.h"
 
-typedef struct tm_timer tm_timer;
-typedef double          tm_interval;
+typedef struct tm_timer tm_timer;    /* opaque type */
+typedef double          tm_interval; /* seconds     */
 
 typedef void (*tm_func)(tm_timer *timer);
 
@@ -19,7 +19,7 @@ tm_alloc(tm_func cb, tm_interval interval);
 
 TM_EXPORT
 void
-tm_settimeout(tm_func cb, tm_interval offset);
+tm_settimeout(tm_func cb, tm_interval delay);
 
 TM_EXPORT
 void

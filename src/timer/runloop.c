@@ -19,6 +19,7 @@
 
 tm_runloop *tm__runloop   = NULL;
 int         tm__runloopid = 0;
+bool        tm__waiting   = false;
 
 static
 void
@@ -67,8 +68,12 @@ tm_runloop_run(void* arg) {
   thread_lock(&loop->mutex);
 
   while (!loop->stop) {
-    if (loop->timercount < 1)
-      thread_cond_wait(&loop->cond, &loop->mutex);
+    if (loop->timercount < 1) {
+      if (!tm__waiting)
+        thread_cond_wait(&loop->cond, &loop->mutex);
+      else
+        break; /* all timers finished, no needs to timers anymore */
+    }
 
     time = tm_time();
 
@@ -145,6 +150,7 @@ tm_def_runloop(void) {
 TM_EXPORT
 void
 tm_wait() {
+  tm__waiting = true;
   thread_join(tm__runloop->thread);
 }
 
