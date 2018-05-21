@@ -111,3 +111,6 @@ test/.libs/*
 test/tests
 * copy.*
 *.o
+win-test/*
+tm-test/*
+tml-test/*
