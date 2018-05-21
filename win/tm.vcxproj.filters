@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include\tm">
+      <UniqueIdentifier>{b548a6d5-9f3f-43e9-8e30-c8de9a5e9b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\default">
+      <UniqueIdentifier>{7b1fda61-1f14-4808-b9ab-5b1e1f9f31e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\types">
+      <UniqueIdentifier>{8ff8513e-5005-4e85-884f-7bff4719a7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win">
+      <UniqueIdentifier>{9f483ddb-66c3-4523-958f-e75b9f2de602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\timer">
+      <UniqueIdentifier>{f6ffd6e2-5069-4078-b1e1-2017455c030a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thread">
+      <UniqueIdentifier>{9a24460d-3bce-4c9b-834f-a0c70835f00f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\tm\allocator.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tm\common.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tm\sleep.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tm\tm.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\default\default.h">
+      <Filter>src\default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\timer\runloop.h">
+      <Filter>src\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\timer\timer.h">
+      <Filter>src\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\types\tm.h">
+      <Filter>src\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\win\thread.h">
+      <Filter>src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thread\thread.h">
+      <Filter>src\thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\allocator.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dllmain.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\default\default.c">
+      <Filter>src\default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\timer\runloop.c">
+      <Filter>src\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\timer\timer.c">
+      <Filter>src\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\win\sleep.c">
+      <Filter>src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\win\thread.c">
+      <Filter>src\win</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
