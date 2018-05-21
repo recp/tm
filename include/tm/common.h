@@ -23,6 +23,7 @@
 #endif
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #endif /* tml_common_h */

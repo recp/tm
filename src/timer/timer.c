@@ -10,7 +10,7 @@
 
 #ifdef __MACH__
 #include <mach/clock.h>
-#include <mach/mach.h>
+#include <mach/mach_time.h>
 #endif
 
 double tm__time2sec = 1.0;
