@@ -45,7 +45,6 @@ script:
       ./configure;
     fi
   - make
-  - make check
 
 after_success:
   - if [[ "$CC" == "gcc" && "$CODE_COVERAGE" == "ON" ]]; then
