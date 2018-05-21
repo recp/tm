@@ -11,6 +11,12 @@ extern "C" {
 
 #include "common.h"
 #include "types.h"
+
+/*!
+ * @brief sleep current thread with given interval
+ *
+ * @param[in] interval time interval in seconds
+ */
 TM_EXPORT
 void
 tm_sleep(tm_interval interval);

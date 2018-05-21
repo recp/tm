@@ -22,7 +22,9 @@ tmdir=$(includedir)/tm
 tm_HEADERS = include/tm/common.h \
              include/tm/allocator.h \
              include/tm/tm.h \
-             include/tm/sleep.h
+             include/tm/sleep.h \
+             include/tm/version.h \
+             include/tm/types.h
 
 libtm_la_SOURCES=\
     src/default/default.c \

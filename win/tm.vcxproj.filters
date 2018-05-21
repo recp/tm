@@ -66,6 +66,12 @@
     <ClInclude Include="..\src\thread\thread.h">
       <Filter>src\thread</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\tm\types.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tm\version.h">
+      <Filter>include\tm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\allocator.c">
