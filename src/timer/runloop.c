@@ -62,6 +62,7 @@ tm_stoptimers(tm_runloop *loop) {
 static
 #if defined(_WIN32) || defined(_MSC_VER)
 DWORD
+WINAPI
 #else
 void*
 #endif

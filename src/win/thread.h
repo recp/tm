@@ -26,7 +26,7 @@ typedef struct tm_thread_rwlock {
 
 TM_HIDE
 tm_thread*
-thread_new(DWORD (*func)(void *), void *obj);
+thread_new(DWORD (WINAPI *func)(void *), void *obj);
 
 TM_HIDE
 void

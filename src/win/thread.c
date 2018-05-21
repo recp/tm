@@ -13,7 +13,7 @@
 
 TM_HIDE
 tm_thread*
-thread_new(DWORD (*func)(void *), void *obj) {
+thread_new(DWORD (WINAPI *func)(void *), void *obj) {
 	tm_allocator *alc;
 	tm_thread    *th;
 
