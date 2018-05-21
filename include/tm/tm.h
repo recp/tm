@@ -10,12 +10,7 @@ extern "C" {
 #endif
 
 #include "common.h"
-
-typedef struct tm_timer tm_timer;    /* opaque type */
-typedef double          tm_interval; /* seconds     */
-
-typedef void  (*tm_func)(tm_timer *timer);
-typedef void (*tm_vfunc)(void *arg);
+#include "types.h"
 
 TM_EXPORT
 tm_timer*
@@ -42,7 +37,7 @@ void
 tm_stop(tm_timer *timer);
 
 TM_EXPORT
-double
+tm_interval
 tm_time(void);
 
 TM_EXPORT

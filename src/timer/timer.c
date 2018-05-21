@@ -113,7 +113,7 @@ tm_stop(tm_timer *timer) {
 }
 
 TM_EXPORT
-double
+tm_interval
 tm_time() {
 #ifdef __MACH__
   uint64_t abstime;
@@ -126,7 +126,7 @@ tm_time() {
 #else
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
-  return (double)ts.tv_sec + ts.tv_nsec * 1e-9;
+  return (tm_interval)ts.tv_sec + ts.tv_nsec * 1e-9;
 #endif
 }
 

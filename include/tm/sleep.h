@@ -9,9 +9,11 @@
 extern "C" {
 #endif
 
+#include "common.h"
+#include "types.h"
 TM_EXPORT
 void
-tm_sleep(double secs);
+tm_sleep(tm_interval interval);
 
 #ifdef __cplusplus
 }
