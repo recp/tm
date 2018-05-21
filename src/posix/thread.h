@@ -8,7 +8,7 @@
 
 #include "../common.h"
 
-#include <pthread/pthread.h>
+#include <pthread.h>
 
 typedef struct tm_thread {
   pthread_t id;

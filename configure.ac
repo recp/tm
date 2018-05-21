@@ -28,6 +28,7 @@ LT_INIT
 
 # Checks for libraries.
 AC_CHECK_LIB([m], [floor])
+AC_CHECK_LIB([pthread], [pthread_create])
 
 AC_SYS_LARGEFILE
 
