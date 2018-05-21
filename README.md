@@ -21,6 +21,29 @@ Currently all docs can be found in headers but in the future complete docs will 
 tm_settimeout(callback, arg, delay);
 ```
 
+## Build
+
+### Unix (Autotools)
+
+```bash
+$ sh autogen.sh
+$ ./configure
+$ make
+$ [sudo] make install
+```
+
+you can grap library in .libs folder after build finished
+
+### Windows (MSBuild)
+Windows related build files, project files are located in `win` folder,
+make sure you are inside `tm/win` folder.
+Code Analysis are enabled, it may take awhile to build
+
+```Powershell
+$ cd win
+$ .\build.bat
+```
+
 #### Example usage
 
 ```C
@@ -56,9 +79,15 @@ main(int argc, const char * argv[]) {
   /* option 4: javascript-like setTimeout */
   tm_settimeout(delayed_func, "Hello World!", 0.00001);
   
+  /*
+  
+  if we call free here timers will be stopped 
+  
   tm_free(timer1);
   tm_free(timer2);
   tm_free(timer3);
+
+  */
   
   /* measure elapsed time */
   start = tm_time();
@@ -76,3 +105,6 @@ main(int argc, const char * argv[]) {
 }
 
 ```
+
+## License
+MIT. check the LICENSE file
