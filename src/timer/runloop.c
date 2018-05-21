@@ -124,7 +124,7 @@ tm_runloop_run(void* arg) {
 
     tm_stoptimers(loop);
 
-    if (sleeptime > 0.0001)
+    if (sleeptime > 0.00001)
       tm_sleep(sleeptime);
   }
 
