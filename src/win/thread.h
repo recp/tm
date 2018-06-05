@@ -26,7 +26,7 @@ typedef struct tm_thread_rwlock {
 
 TM_HIDE
 tm_thread*
-thread_new(DWORD (WINAPI *func)(void *), void *obj);
+thread_new(void (*func)(void *), void *obj);
 
 TM_HIDE
 void
@@ -85,4 +85,3 @@ void
 thread_wrlock(tm_thread_rwlock *rwlock);
 
 #endif /* src_win_thread_h */
-

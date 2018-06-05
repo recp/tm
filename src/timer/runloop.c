@@ -60,13 +60,7 @@ tm_stoptimers(tm_runloop *loop) {
 }
 
 static
-#if defined(_WIN32) || defined(_MSC_VER)
-DWORD
-WINAPI
-#else
-void*
-#endif
-
+void
 tm_runloop_run(void* arg) {
   tm_runloop *loop;
   tm_timer   *tmr;
@@ -130,13 +124,6 @@ tm_runloop_run(void* arg) {
   }
 
   thread_unlock(&loop->mutex);
-
-#if defined(_WIN32) || defined(_MSC_VER)
-    return 0;
-#else
-    return NULL;
-#endif
-
 }
 
 TM_HIDE

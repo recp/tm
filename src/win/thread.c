@@ -11,16 +11,33 @@
    [1] http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
 */
 
+typedef struct tm_thread_entry {
+  void *arg;
+  void (*func)(void *);
+} tm_thread_entry;
+
+static
+DWORD
+WINAPI
+thread_entry(void *arg) {
+  tm_thread_entry *entry;
+  entry = arg;
+  entry->func(entry->arg);
+}
+
 TM_HIDE
 tm_thread*
-thread_new(DWORD (WINAPI *func)(void *), void *obj) {
-	tm_allocator *alc;
-	tm_thread    *th;
+thread_new(void (*func)(void *), void *obj) {
+  tm_allocator   *alc;
+  tm_thread      *th;
+  tm_thread_entry entry;
 
-	alc = tm_get_allocator();
-	th  = alc->calloc(1, sizeof(*th));
+  alc        = tm_get_allocator();
+  th         = alc->calloc(1, sizeof(*th));
+  entry.func = func;
+  entry.arg  = obj;
 
-	th->id = CreateThread(NULL, 0, func, obj, 0, NULL);
+	th->id = CreateThread(NULL, 0, thread_entry, &entry, 0, NULL);
 
 	return th;
 }
@@ -96,7 +113,7 @@ TM_HIDE
 void
 thread_rwunlock(tm_thread_rwlock *rwlock) {
   void *state;
-  
+
   state = *(void **)&rwlock->rwlock;
 
   if (state == (void *)1) {

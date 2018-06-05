@@ -5,20 +5,37 @@
 
 #include "thread.h"
 
+typedef struct tm_thread_entry {
+  void *arg;
+  void (*func)(void *);
+} tm_thread_entry;
+
+static
+void*
+thread_entry(void *arg) {
+  tm_thread_entry *entry;
+  entry = arg;
+  entry->func(entry->arg);
+  return NULL;
+}
+
 TM_HIDE
 tm_thread*
-thread_new(void* (*func)(void *), void *obj) {
-  tm_allocator  *alc;
-  tm_thread     *th;
-  pthread_attr_t attr;
+thread_new(void (func)(void *), void *obj) {
+  tm_allocator   *alc;
+  tm_thread      *th;
+  pthread_attr_t  attr;
+  tm_thread_entry entry;
 
-  alc = tm_get_allocator();
-  th  = alc->calloc(1, sizeof(*th));
+  alc        = tm_get_allocator();
+  th         = alc->calloc(1, sizeof(*th));
+  entry.func = func;
+  entry.arg  = obj;
 
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-  pthread_create(&th->id, &attr, func, obj);
+  pthread_create(&th->id, &attr, thread_entry, &entry);
   pthread_attr_destroy(&attr);
 
   return th;

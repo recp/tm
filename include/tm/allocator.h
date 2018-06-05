@@ -12,11 +12,11 @@ extern "C" {
 #include "common.h"
 
 typedef struct tm_allocator {
-  void  *(*malloc)(size_t);
-  void  *(*calloc)(size_t, size_t);
-  void *(*realloc)(void *, size_t);
+  void*  (*malloc)(size_t);
+  void*  (*calloc)(size_t, size_t);
+  void* (*realloc)(void *, size_t);
   int  (*memalign)(void **, size_t, size_t);
-  char  *(*strdup)(const char *);
+  char*  (*strdup)(const char *);
   void     (*free)(void *);
   size_t   (*size)(const void *);
 } tm_allocator;
