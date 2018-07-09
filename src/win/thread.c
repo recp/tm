@@ -20,24 +20,32 @@ static
 DWORD
 WINAPI
 thread_entry(void *arg) {
-  tm_thread_entry *entry;
-  entry = arg;
-  entry->func(entry->arg);
+  tm_thread_entry entry;
+
+  /* to call free before calling thread func */
+  memcpy(&entry, arg, sizeof(entry));
+  free(arg);
+
+  entry.func(entry.arg);
+
+  return 0;
 }
 
 TM_HIDE
 tm_thread*
 thread_new(void (*func)(void *), void *obj) {
   tm_allocator   *alc;
-  tm_thread      *th;
-  tm_thread_entry entry;
+  tm_thread       *th;
+  tm_thread_entry *entry;
 
-  alc        = tm_get_allocator();
-  th         = alc->calloc(1, sizeof(*th));
-  entry.func = func;
-  entry.arg  = obj;
 
-	th->id = CreateThread(NULL, 0, thread_entry, &entry, 0, NULL);
+  alc         = tm_get_allocator();
+  th          = alc->calloc(1, sizeof(*th));
+  entry       = calloc(1, sizeof(*entry));
+  entry->func = func;
+  entry->arg  = obj;
+
+	th->id = CreateThread(NULL, 0, thread_entry, entry, 0, NULL);
 
 	return th;
 }

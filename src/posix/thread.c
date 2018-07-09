@@ -13,29 +13,35 @@ typedef struct tm_thread_entry {
 static
 void*
 thread_entry(void *arg) {
-  tm_thread_entry *entry;
-  entry = arg;
-  entry->func(entry->arg);
+  tm_thread_entry entry;
+
+  /* to call free before calling thread func */
+  memcpy(&entry, arg, sizeof(entry));
+  free(arg);
+
+  entry.func(entry.arg);
+
   return NULL;
 }
 
 TM_HIDE
 tm_thread*
 thread_new(void (func)(void *), void *obj) {
-  tm_allocator   *alc;
-  tm_thread      *th;
-  pthread_attr_t  attr;
-  tm_thread_entry entry;
+  tm_allocator    *alc;
+  tm_thread       *th;
+  tm_thread_entry *entry;
+  pthread_attr_t   attr;
 
-  alc        = tm_get_allocator();
-  th         = alc->calloc(1, sizeof(*th));
-  entry.func = func;
-  entry.arg  = obj;
+  alc         = tm_get_allocator();
+  th          = alc->calloc(1, sizeof(*th));
+  entry       = calloc(1, sizeof(*entry));
+  entry->func = func;
+  entry->arg  = obj;
 
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-  pthread_create(&th->id, &attr, thread_entry, &entry);
+  pthread_create(&th->id, &attr, thread_entry, entry);
   pthread_attr_destroy(&attr);
 
   return th;
