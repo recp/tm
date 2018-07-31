@@ -3,14 +3,9 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/pact2ragclo4m25w/branch/master?svg=true)](https://ci.appveyor.com/project/recp/tm/branch/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba230efea5f94149822a48e12584942f)](https://www.codacy.com/app/recp/tm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=recp/tm&amp;utm_campaign=Badge_Grade)
 
-This library provides an easy way to set timers, timeouts. 
-As initial version all timers are run in single runloop at seperate thread. 
-In the future multiple runloop may be allowed. 
-
-#### Why? 
-
-It has been born because a timer and timeline utils were needed in a render engine called [Graphics Kernel](https://github.com/recp/gk) for animations and other things. 
-It seems very good in first release, in the future it may provide other features.
+This library provides an easy way to set timers and timeouts. 
+As initial version all timers run in single runloop at seperate thread. 
+Currently only one thread is used for all timers, because there is only one runloop. In the future multiple runloop may be allowed. 
 
 #### Documentation
 
