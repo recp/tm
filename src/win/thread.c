@@ -45,9 +45,9 @@ thread_new(void (*func)(void *), void *obj) {
   entry->func = func;
   entry->arg  = obj;
 
-	th->id = CreateThread(NULL, 0, thread_entry, entry, 0, NULL);
+  th->id = CreateThread(NULL, 0, thread_entry, entry, 0, NULL);
 
-	return th;
+  return th;
 }
 
 TM_HIDE
