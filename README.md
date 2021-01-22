@@ -19,6 +19,13 @@ Currently all docs can be found in headers but in the future complete docs will 
 tm_settimeout(callback, arg, delay);
 ```
 
+## TODOs:
+
+- [ ] Improve loopkup, make timers ordered. This may reduce some lookup operations runloop 
+- [ ] Tests
+- [ ] More time and timeline utils
+- [ ] More platform support
+
 ## Build
 
 ### Unix (Autotools)
