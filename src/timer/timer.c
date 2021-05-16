@@ -5,6 +5,7 @@
 
 #include "../common.h"
 #include "runloop.h"
+#include "timer.h"
 
 #include <time.h>
 
