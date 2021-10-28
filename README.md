@@ -1,6 +1,5 @@
 # ⏱ Timer and Timeline Utils for `C`
-[![Build Status](https://travis-ci.com/recp/tm.svg?branch=master)](https://travis-ci.com/recp/tm)
-[![Build status](https://ci.appveyor.com/api/projects/status/pact2ragclo4m25w/branch/master?svg=true)](https://ci.appveyor.com/project/recp/tm/branch/master)
+[![C/C++ CI](https://github.com/recp/tm/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/recp/tm/actions/workflows/c-cpp.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba230efea5f94149822a48e12584942f)](https://www.codacy.com/app/recp/tm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=recp/tm&amp;utm_campaign=Badge_Grade)
 
 This library provides an easy way to set timers and timeouts. 
