@@ -6,8 +6,10 @@
 #ifndef tm_common_h
 #define tm_common_h
 
-#if defined(_WIN32)
-#  ifdef LIBTM_DLL
+#if defined(_MSC_VER)
+#  ifdef TM_STATIC
+#    define TM_EXPORT
+#  elif defined(TM_EXPORTS)
 #    define TM_EXPORT __declspec(dllexport)
 #  else
 #    define TM_EXPORT __declspec(dllimport)
