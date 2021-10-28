@@ -38,7 +38,6 @@ thread_new(void (*func)(void *), void *obj) {
   tm_thread       *th;
   tm_thread_entry *entry;
 
-
   alc         = tm_get_allocator();
   th          = alc->calloc(1, sizeof(*th));
   entry       = calloc(1, sizeof(*entry));
