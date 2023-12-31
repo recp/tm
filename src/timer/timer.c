@@ -115,7 +115,7 @@ tm_stop(tm_timer *timer) {
 
 TM_EXPORT
 tm_interval
-tm_time() {
+tm_time(void) {
 #ifdef __MACH__
   uint64_t abstime;
   abstime = mach_absolute_time();
@@ -133,7 +133,7 @@ tm_time() {
 
 TM_HIDE
 void
-tm__time_init() {
+tm__time_init(void) {
 #ifdef __MACH__
   mach_timebase_info_data_t info;
   mach_timebase_info(&info);

@@ -23,6 +23,6 @@ tm_allocator tm__alc = {
 
 TM_HIDE
 tm_allocator*
-tm_def_alc() {
+tm_def_alc(void) {
   return &tm__alc;
 }

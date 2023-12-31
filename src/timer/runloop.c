@@ -153,7 +153,7 @@ tm_def_runloop(void) {
 
 TM_EXPORT
 void
-tm_wait() {
+tm_wait(void) {
   tm__waiting = true;
   thread_join(tm__runloop->thread);
 }

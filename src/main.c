@@ -12,13 +12,13 @@ void TM_DESTRUCTOR  tm__lib_cleanup(void);
 
 void
 TM_CONSTRUCTOR
-tm__lib_init() {
+tm__lib_init(void) {
   tm__time_init();
   tm__runloop_init();
 }
 
 void
 TM_DESTRUCTOR
-tm__lib_cleanup() {
+tm__lib_cleanup(void) {
   
 }
